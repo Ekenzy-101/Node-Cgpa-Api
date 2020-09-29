@@ -20,7 +20,6 @@ module.exports = {
       .normalizeEmail()
       .isLength({ max: 250 })
       .withMessage("Field should be less than 250 characters"),
-    ,
     body("password", "Password must contain at least 5 characters").isLength({
       min: 5,
       max: 1000,
