@@ -7,18 +7,20 @@ module.exports = {
       .isEmpty()
       .trim()
       .escape()
-      .withMessage("Field is required")
-      .isLength({ min: 5, max: 25 })
-      .withMessage("Field should be between 5 and 25 characters"),
+      .withMessage("Field is required"),
     body("lastname")
       .not()
       .isEmpty()
       .trim()
       .escape()
-      .withMessage("Field is required")
-      .isLength({ min: 5, max: 25 })
-      .withMessage("Field should be between 5 and 25 characters"),
-    body("email", "Email is not valid").isEmail().normalizeEmail(),
+      .withMessage("Field is required"),
+    body("email")
+      .isEmail()
+      .withMessage("Email is not valid")
+      .normalizeEmail()
+      .isLength({ max: 250 })
+      .withMessage("Field should be less than 250 characters"),
+    ,
     body("password", "Password must contain at least 5 characters").isLength({
       min: 5,
       max: 1000,
