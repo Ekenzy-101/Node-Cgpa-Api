@@ -6,11 +6,7 @@ const authRouter = require("../routes/auth");
 const error = require("../middlewares/error");
 
 module.exports = (app) => {
-  app.use(
-    cors({
-      origin: "*",
-    })
-  );
+  app.options("*", cors());
   app.use(express.json());
   app.use("/api/users", usersRouter);
   app.use("/api/courses", coursesRouter);
