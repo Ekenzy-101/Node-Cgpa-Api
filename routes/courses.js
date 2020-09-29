@@ -75,6 +75,10 @@ router.post("/", [auth, validate], async (req, res) => {
 });
 
 router.put("/:id", [auth, validate], async (req, res) => {
+  // Check if id is a valid Object ID
+  if (!objectid.isValid(req.params.id))
+    return res.status(404).send("Invalid Object ID");
+
   // Validate request from the body
   let error = getValidationErrors(req);
   let { semester, unit, level, title, code, score } = error;
@@ -115,8 +119,12 @@ router.put("/:id", [auth, validate], async (req, res) => {
 });
 
 router.delete("/:id", auth, async (req, res) => {
+  let id = req.params.id;
+  // Check if id is a valid Object ID
+  if (!objectid.isValid(id)) return res.status(404).send("Invalid Object ID");
+
   // Check if course exists
-  let course = await Course.findById(req.params.id).select("-__v");
+  let course = await Course.findById(id);
   if (!course)
     return res.status(404).send("The course with the given ID was not found.");
 
@@ -124,7 +132,8 @@ router.delete("/:id", auth, async (req, res) => {
   if (course.user.toString() !== req.user._id)
     return res.status(403).send("Access denied");
 
-  await course.remove();
-  res.send(course);
+  // Delete the course
+  let deletedCourse = await Course.findByIdAndRemove(id);
+  res.send(deletedCourse);
 });
 module.exports = router;
